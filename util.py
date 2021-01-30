@@ -144,7 +144,7 @@ def plot(data):
 
     for timestamp, videos in tqdm.tqdm(data):
         
-        ts = datetime.datetime.fromtimestamp(timestamp)
+        ts = datetime.datetime.fromtimestamp(timestamp, config.TIMEZONE)
         for id_, title, channelTitle, viewCount, likeCount, dislikeCount, commentCount in videos:
             if id_ not in latest_top_ids_set:
                 continue
