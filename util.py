@@ -134,25 +134,41 @@ def human_format(num, round_to=1):
     return '{:.{}f}{}'.format(round(num, round_to), round_to, ['', 'K', 'M', 'G', 'T', 'P'][magnitude])
 
 
-def plot(data):
+def plot(data, TOP_LIMIT = 100):
     print('start plot')
 
-    latest_top_ids = [v[0] for v in data[-1][1]]
-    latest_top_ids_set = set(latest_top_ids)
+    labels = []
+    latest_top_ids = []
+    id_2_index = {}
 
-    X_viewCount    = pd.DataFrame(columns=latest_top_ids, dtype='int32')
+    latest_ts, latest_videos = data[-1]
+    latest_videos = latest_videos[:TOP_LIMIT]
+    
+    for i, (id_, title, channelTitle, viewCount, likeCount, dislikeCount, commentCount) in enumerate(latest_videos):
+        l = f'{i+1:>3} | {human_format(viewCount):>7} | {channelTitle[:18]:<18} | {title[:80]}'
+        labels.append(l)
+        latest_top_ids.append(id_)
+        id_2_index[id_] = i
+
+    df_data = []
+    df_index = []
 
     for timestamp, videos in tqdm.tqdm(data):
-        
+        row = [0] * len(id_2_index)
         ts = datetime.datetime.fromtimestamp(timestamp, config.TIMEZONE)
         for id_, title, channelTitle, viewCount, likeCount, dislikeCount, commentCount in videos:
-            if id_ not in latest_top_ids_set:
+            index = id_2_index.get(id_)
+            if index is None:
                 continue
-            X_viewCount.loc[ts, id_] = viewCount
 
-    TOP_LIMIT = 100
-    X = X_viewCount.iloc[:, :TOP_LIMIT]
+            row[index] = viewCount
 
+        df_data.append(row)
+        df_index.append(ts)
+
+    X_viewCount = pd.DataFrame(df_data, df_index, columns=latest_top_ids, dtype='int32')
+    
+    X = X_viewCount
     diff = X.diff().resample('5Min').sum()
     # diff = X.diff()
     diff = diff.T
@@ -160,15 +176,6 @@ def plot(data):
 
     fig, ax = plt.subplots(figsize=(22, 17), facecolor='white')
 
-
-    labels = []
-
-    for i, (id_, title, channelTitle, viewCount, likeCount, dislikeCount, commentCount) in enumerate(data[-1][1][:TOP_LIMIT], start=1):
-
-    # for i, thread in enumerate(top.index):
-    #     count, title = info.get(thread, (0, 'NOT FOUND'))
-        l = f'{i:>3} | {human_format(viewCount):>7} | {channelTitle[:18]:<18} | {title[:80]}'
-        labels.append(l)
 
     # ax.imshow(diff, aspect='auto', interpolation='none')
     # ax.imshow(diff, origin='lower', aspect='auto', interpolation='none', norm=LogNorm())
@@ -182,8 +189,6 @@ def plot(data):
     ax.set_yticks(range(len(labels)))
     # ax.set_yticklabels(labels, ha='left', fontname='Menlo')
     ax.set_yticklabels(labels, ha='left', fontname='monospace')
-
-    # ''
 
     xticks = range(0, len(diff.columns), 20)
     ax.set_xticks(xticks)
