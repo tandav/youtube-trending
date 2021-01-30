@@ -185,7 +185,7 @@ def plot(data):
 
     # ''
 
-    xticks = range(0, len(diff.columns), 10)
+    xticks = range(0, len(diff.columns), 20)
     ax.set_xticks(xticks)
     ax.xaxis.set_ticklabels(diff.columns.strftime('%H:%M')[xticks])
 
