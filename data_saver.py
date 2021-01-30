@@ -36,8 +36,8 @@ while True:
     timestamp = int(now.timestamp())
     data.append([timestamp, videos])
     save_data(data)
-    t_elapsed = time.time() - t0
     util.plot(data)
+    t_elapsed = time.time() - t0
     print(now, f'elapsed in {t_elapsed}')
 
     sleep_time = config.TIME_LAG - t_elapsed
