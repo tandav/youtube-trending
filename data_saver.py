@@ -7,6 +7,7 @@ from credentials import api_key
 import config
 import util
 from pathlib import Path
+import dateutil
 
 
 def load_data():
@@ -27,12 +28,14 @@ def save_data(data):
 
 
 data = load_data()
+MSK = dateutil.tz.gettz('Europe/Moscow')
+
 
 while True:
     t0 = time.time()
     videos = util.trending_videos(api_key, regionCode='RU')
     videos = util.compress(videos, config.COMPRESS_SCHEMA)
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(tz=MSK)
     timestamp = int(now.timestamp())
     data.append([timestamp, videos])
     save_data(data)
