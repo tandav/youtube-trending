@@ -158,7 +158,7 @@ def plot(data):
     diff = diff.T
 
 
-    fig, ax = plt.subplots(figsize=(20, 18), facecolor='white')
+    fig, ax = plt.subplots(figsize=(22, 17), facecolor='white')
 
 
     labels = []
@@ -167,7 +167,7 @@ def plot(data):
 
     # for i, thread in enumerate(top.index):
     #     count, title = info.get(thread, (0, 'NOT FOUND'))
-        l = f'{i:>2} | {human_format(viewCount):>7} | {channelTitle[:18]:<18} | {title[:80]}'
+        l = f'{i:>3} | {human_format(viewCount):>7} | {channelTitle[:18]:<18} | {title[:80]}'
         labels.append(l)
 
     # ax.imshow(diff, aspect='auto', interpolation='none')
