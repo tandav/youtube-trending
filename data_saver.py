@@ -28,14 +28,13 @@ def save_data(data):
 
 
 data = load_data()
-MSK = dateutil.tz.gettz('Europe/Moscow')
 
 
 while True:
     t0 = time.time()
     videos = util.trending_videos(api_key, regionCode='RU')
     videos = util.compress(videos, config.COMPRESS_SCHEMA)
-    now = datetime.datetime.now(tz=MSK)
+    now = datetime.datetime.now(tz=config.TIMEZONE)
     timestamp = int(now.timestamp())
     data.append([timestamp, videos])
     save_data(data)

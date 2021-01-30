@@ -177,7 +177,7 @@ def plot(data):
     ax.imshow(diff, aspect='auto', interpolation='nearest', norm=LogNorm())
     # ax.imshow(diff, norm=LogNorm())
 
-    plt.title(f'last update: {datetime.datetime.now()}')
+    plt.title(f'last update: {datetime.datetime.now(tz=config.TIMEZONE)}')
     ax.yaxis.tick_right()
     ax.set_yticks(range(len(labels)))
     # ax.set_yticklabels(labels, ha='left', fontname='Menlo')
