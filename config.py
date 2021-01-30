@@ -1,4 +1,4 @@
-import dateutil
+import dateutil.tz
 
 COMPRESS_SCHEMA = 'id', 'title', 'channelTitle', 'viewCount', 'likeCount', 'dislikeCount', 'commentCount'
 FILE = 'data.json'
