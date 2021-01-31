@@ -201,6 +201,7 @@ def plot(data, TOP_LIMIT = 100):
     # plt.show()
     plt.tight_layout()
     plt.savefig(config.PLOT_PATH)
+    plt.close(fig) # trying fix memory leak https://stackoverflow.com/a/33343289/4204843
     print('end plot')
 
 
