@@ -174,7 +174,7 @@ def plot(data, TOP_LIMIT = 100):
     diff = diff.T
 
 
-    fig, ax = plt.subplots(figsize=(22, 17), facecolor='white')
+    fig, ax = plt.subplots(figsize=(9, 8), facecolor='white')
 
 
     # ax.imshow(diff, aspect='auto', interpolation='none')
@@ -184,15 +184,15 @@ def plot(data, TOP_LIMIT = 100):
     ax.imshow(diff, aspect='auto', interpolation='nearest', norm=LogNorm())
     # ax.imshow(diff, norm=LogNorm())
 
-    plt.title(f'last update: {datetime.datetime.now(tz=config.TIMEZONE)}')
+    ax.set_title(f'last update: {datetime.datetime.now(tz=config.TIMEZONE)}', fontsize= 5)
     ax.yaxis.tick_right()
     ax.set_yticks(range(len(labels)))
     # ax.set_yticklabels(labels, ha='left', fontname='Menlo')
-    ax.set_yticklabels(labels, ha='left', fontname='monospace')
+    ax.set_yticklabels(labels, ha='left', fontname='monospace', fontsize=4)
 
-    xticks = range(0, len(diff.columns), 20)
+    xticks = range(0, len(diff.columns), 40)
     ax.set_xticks(xticks)
-    ax.xaxis.set_ticklabels(diff.columns.strftime('%H:%M')[xticks])
+    ax.xaxis.set_ticklabels(diff.columns.strftime('%H:%M')[xticks], fontsize=6)
 
     # ax.xaxis.set_ticklabels(diff.columns, rotation=90)
     # ax.xaxis.set_major_formatter(formatter)
