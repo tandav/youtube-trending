@@ -8,6 +8,7 @@ import config
 import util
 from pathlib import Path
 import dateutil
+import gc
 
 
 def load_data():
@@ -40,6 +41,7 @@ while True:
     data = util.drop_old(data)
     save_data(data)
     util.plot(data)
+    gc.collect()
     t_elapsed = time.time() - t0
     print(now, f'elapsed in {t_elapsed}')
 
