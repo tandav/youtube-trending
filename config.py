@@ -10,3 +10,4 @@ TIME_LAG = 60
 # anyway you'll do resampling (youtube updates stats no very often) -> so use bigger time lag
 PLOT_PATH = 'image.pdf'
 TIMEZONE = dateutil.tz.gettz('Europe/Moscow')
+TOP_LIMIT = 100

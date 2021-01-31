@@ -160,7 +160,7 @@ def human_format(num, round_to=1):
     return '{:.{}f}{}'.format(round(num, round_to), round_to, ['', 'K', 'M', 'G', 'T', 'P'][magnitude])
 
 
-def plot(data, published_at, TOP_LIMIT = 100):
+def plot(data, published_at):
     print('start plot')
 
     labels = []
@@ -168,7 +168,7 @@ def plot(data, published_at, TOP_LIMIT = 100):
     id_2_index = {}
 
     latest_ts, latest_videos = data[-1]
-    latest_videos = latest_videos[:TOP_LIMIT]
+    latest_videos = latest_videos[:config.TOP_LIMIT]
     
     for i, (id_, title, channelTitle, viewCount, likeCount, dislikeCount, commentCount) in enumerate(latest_videos):
         published_ago = ago((datetime.datetime.now(datetime.timezone.utc) - dateutil.parser.parse(published_at[i])).total_seconds())
