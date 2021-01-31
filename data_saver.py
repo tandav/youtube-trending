@@ -34,13 +34,14 @@ data = load_data()
 while True:
     t0 = time.time()
     videos = util.trending_videos(api_key, regionCode='RU')
+    published_at = [v.pop('publishedAt') for v in videos]
     videos = util.compress(videos, config.COMPRESS_SCHEMA)
     now = datetime.datetime.now(tz=config.TIMEZONE)
     timestamp = int(now.timestamp())
     data.append([timestamp, videos])
     data = util.drop_old(data)
     save_data(data)
-    util.plot(data)
+    util.plot(data, published_at)
     gc.collect()
     t_elapsed = time.time() - t0
     print(now, f'elapsed in {t_elapsed}')

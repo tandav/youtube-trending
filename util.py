@@ -7,11 +7,36 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 import config
 import tqdm
-
+import dateutil.parser
+import dateutil.tz
 
 # https://more-itertools.readthedocs.io/en/stable/api.html
 def take   (n, iterable): return list(itertools.islice(iterable, n))
 def chunked(iterable, n): return iter(functools.partial(take, n, iter(iterable)), [])
+
+def ago(e):
+    # e: pass timedelta between timestamps in 1579812524 format
+    e *= 1000 # convert to 1579812524000 format
+    t = round(e / 1000)
+    n = round(t /   60)
+    r = round(n /   60)
+    o = round(r /   24)
+    i = round(o /   30)
+    a = round(i /   12)
+    if   e <  0: return              'just now'
+    elif t < 10: return              'just now'
+    elif t < 45: return str(t) + ' seconds ago'
+    elif t < 90: return          'a minute ago'
+    elif n < 45: return str(n) + ' minutes ago'
+    elif n < 90: return           'an hour ago' 
+    elif r < 24: return str(r) +   ' hours ago'
+    elif r < 36: return             'a day ago'
+    elif o < 30: return str(o) +    ' days ago'
+    elif o < 45: return           'a month ago'
+    elif i < 12: return str(i) +  ' months ago'
+    elif i < 18: return            'a year ago'
+    else:        return str(a) +   ' years ago'
+
 
 
 def trending_videos(api_key, regionCode='US'):
@@ -43,6 +68,7 @@ def trending_videos(api_key, regionCode='US'):
             statistics = v['statistics']
             del statistics['favoriteCount']
             w = {'id': v['id'], 'title': snippet['title'], 'channelTitle': snippet['channelTitle'],
+                 'publishedAt': snippet['publishedAt'],
                  'viewCount':    int(statistics.get('viewCount', 0)),
                  'likeCount':    int(statistics.get('likeCount', 0)),
                  'dislikeCount': int(statistics.get('dislikeCount', 0)),
@@ -134,7 +160,7 @@ def human_format(num, round_to=1):
     return '{:.{}f}{}'.format(round(num, round_to), round_to, ['', 'K', 'M', 'G', 'T', 'P'][magnitude])
 
 
-def plot(data, TOP_LIMIT = 100):
+def plot(data, published_at, TOP_LIMIT = 100):
     print('start plot')
 
     labels = []
@@ -145,7 +171,8 @@ def plot(data, TOP_LIMIT = 100):
     latest_videos = latest_videos[:TOP_LIMIT]
     
     for i, (id_, title, channelTitle, viewCount, likeCount, dislikeCount, commentCount) in enumerate(latest_videos):
-        l = f'{i+1:>3} | {human_format(viewCount):>7} | {channelTitle[:18]:<18} | {title[:80]}'
+        published_ago = ago((datetime.datetime.now(datetime.timezone.utc) - dateutil.parser.parse(published_at[i])).total_seconds())
+        l = f'{i+1:>3} | {published_ago:>12} |{human_format(viewCount):>7} | {channelTitle[:18]:<18} | {title[:80]}'
         labels.append(l)
         latest_top_ids.append(id_)
         id_2_index[id_] = i
@@ -211,3 +238,5 @@ def drop_old(data):
     out = itertools.dropwhile(lambda x: now - x[0] > DAY_SECONDS, data)
     out = list(out)
     return out
+
+
