@@ -16,7 +16,7 @@ def load_data():
         with p.open() as fd: data = json.load(fd)
     else:
         data = []
-    data = collections.deque(data, maxlen=config.SECONDS_IN_DAY//config.TIME_LAG)
+    data = util.drop_old(data)
     return data
 
 def save_data(data):
@@ -37,6 +37,7 @@ while True:
     now = datetime.datetime.now(tz=config.TIMEZONE)
     timestamp = int(now.timestamp())
     data.append([timestamp, videos])
+    data = util.drop_old(data)
     save_data(data)
     util.plot(data)
     t_elapsed = time.time() - t0

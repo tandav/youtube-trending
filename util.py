@@ -202,3 +202,11 @@ def plot(data, TOP_LIMIT = 100):
     plt.tight_layout()
     plt.savefig(config.PLOT_PATH)
     print('end plot')
+
+
+def drop_old(data):
+    DAY_SECONDS = 60 * 60 * 24
+    now = datetime.datetime.now().timestamp()
+    out = itertools.dropwhile(lambda x: now - x[0] > DAY_SECONDS, data)
+    out = list(out)
+    return out
