@@ -210,8 +210,8 @@ def plot(data, published_at):
     # ax.imshow(diff, origin='lower', aspect='auto', interpolation='none', norm=LogNorm())
     # ax.imshow(diff, origin='upper', aspect='auto', interpolation='none', norm=LogNorm())
 
-    ax.imshow(diff, aspect='auto', interpolation='nearest', norm=LogNorm())
-    # ax.imshow(diff, aspect='auto', interpolation='nearest')
+    # ax.imshow(diff, aspect='auto', interpolation='nearest', norm=LogNorm())
+    ax.imshow(diff, aspect='auto', interpolation='nearest')
     # ax.imshow(diff, norm=LogNorm())
 
     ax.set_title(f'last update: {datetime.datetime.now(tz=config.TIMEZONE)}', fontsize= 5)
