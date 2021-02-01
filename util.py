@@ -5,7 +5,6 @@ import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
-from sklearn.preprocessing import MinMaxScaler
 import config
 import tqdm
 import dateutil.parser
@@ -198,7 +197,6 @@ def plot(data, published_at):
     
     X = X_viewCount
     diff = X.diff().resample('5Min').sum()
-    diff = pd.DataFrame(MinMaxScaler().fit_transform(diff), diff.index, diff.columns)
     # diff = X.diff()
     diff = diff.T
 
@@ -210,8 +208,7 @@ def plot(data, published_at):
     # ax.imshow(diff, origin='lower', aspect='auto', interpolation='none', norm=LogNorm())
     # ax.imshow(diff, origin='upper', aspect='auto', interpolation='none', norm=LogNorm())
 
-    # ax.imshow(diff, aspect='auto', interpolation='nearest', norm=LogNorm())
-    ax.imshow(diff, aspect='auto', interpolation='nearest')
+    ax.imshow(diff, aspect='auto', interpolation='nearest', norm=LogNorm())
     # ax.imshow(diff, norm=LogNorm())
 
     ax.set_title(f'last update: {datetime.datetime.now(tz=config.TIMEZONE)}', fontsize= 5)
